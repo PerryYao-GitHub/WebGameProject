@@ -1,9 +1,9 @@
 <script setup>
-// import { useRoute } from "vue-router";
-// import { computed } from "vue";
-//
-// const route = useRoute();
-// let routeName = computed(() => route.name)
+import { useRoute } from "vue-router";
+import { computed } from "vue";
+
+const route = useRoute();
+let routeName = computed(() => route.name)
 
 </script>
 
@@ -16,13 +16,13 @@
 
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-<!--            <router-link :class="routeName === 'pk_index' ? 'nav-link active' : 'nav-link'" :to="{name: 'pk_index'}">对战</router-link>-->
+            <router-link :class="routeName === 'pk' ? 'nav-link active' : 'nav-link'" :to="{name: 'pk'}">PK</router-link>
           </li>
           <li class="nav-item">
-<!--            <router-link :class="routeName === 'record_index' ? 'nav-link active' : 'nav-link'" :to="{name: 'record_index'}">战绩</router-link>-->
+            <router-link :class="routeName === 'record' ? 'nav-link active' : 'nav-link'" :to="{name: 'record'}">Record</router-link>
           </li>
           <li class="nav-item">
-<!--            <router-link :class="routeName === 'ranklist_index' ? 'nav-link active' : 'nav-link'" :to="{name: 'ranklist_index'}">排行榜</router-link>-->
+            <router-link :class="routeName === 'ranking' ? 'nav-link active' : 'nav-link'" :to="{name: 'ranking'}">Ranking</router-link>
           </li>
         </ul>
 
@@ -32,14 +32,14 @@
               ypy
             </a>
             <ul class="dropdown-menu">
-<!--              <router-link class="dropdown-item" :to="{name: 'user_bot_index'}">我的 Bot</router-link>-->
+              <router-link class="dropdown-item" :to="{name: 'user_bot'}">My Bots</router-link>
               <li>
                 <hr class="dropdown-divider">
               </li>
 
-              <li><a class="dropdown-item" href="#">登入</a></li>
+              <li><a class="dropdown-item" href="#">Log in</a></li>
 
-              <li><a class="dropdown-item" href="#">退出</a></li>
+              <li><a class="dropdown-item" href="#">Log out</a></li>
             </ul>
           </li>
 
