@@ -1,11 +1,11 @@
-# Step 1: Start
+# 1. Start
 使用 powershell 命令 `vue ui` 打开 vue3 图形化界面, 创建***前端项目***`front-web` (网页端)
 
 安装如下组件:
 - 插件 -> `vue-router` & `vuex`
 - 依赖 -> `jQuery` & `Bootstrap` & `popperjs/core`
 
-# Step 2: 配置 `App.vue`
+# 2. 配置 `App.vue`
 
 `App.vue` 是整个前端项目的根组件 (root component), 它扮演着组合和管理其他组件的角色, 不是单一的视图
 
@@ -130,7 +130,7 @@ background-color: rgba(255, 255, 255, 0.3);
 background-size: cover;
 }
   ```
-# Step 3: 配置其它 views; 实现导航栏功能
+# 3. 配置其它 views; 实现导航栏功能
 在 `views/` 目录下创建目录和vue组件:
   - `pk/`: 对战页面 -> 创建 `PkIndex.vue` (Index 通常代表主入口)
   - `ranking/`: 排行榜 -> 创建 `RankingIndex.vue`
@@ -245,4 +245,79 @@ export default router
 
 接下来修改 `NavBar.bue` 中的链接 (取消之前的注释), 使之可以访问以上urls
 
-# Step 4: PK 页面的游戏编写
+# 4. PK 页面的游戏编写
+## 4.1. 编写游戏界面的 views 部分
+需要编写两个 components: 
+- `PlayGround.vue`: 这是针对任何游戏都可以复用的 component, 它需要引用 `GameMap.vue`:
+```html
+<script setup>
+import GameMap from "@/components/GameMap.vue";
+</script>
+
+<template>
+  <div class="playground">
+    <GameMap />
+  </div>
+</template>
+
+<style scoped>
+div.playground {
+  width: 60vw;
+  height: 70vh;
+  margin: 40px auto;
+}
+</style>
+```
+- `GameMap.vue`: 这是针对 King of Bots 的地图 component, 它需要调用在 `src/assets/scripts/` 中的 `GameMap.js` 代码:
+```html
+<script setup>
+// import { GameMap } from "@/assets/scripts/GameMap";
+import { ref, onMounted } from "vue";
+
+const parent = ref(null);
+const canvas = ref(null);
+
+onMounted(() => {
+  // new GameMap(canvas.value.getContext('2d'), parent.value);
+})
+</script>
+
+<template>
+  <div ref="parent" class="GameMap">
+    <canvas ref="canvas" tabindex="0">
+
+    </canvas>
+  </div>
+</template>
+
+<style scoped>
+div.GameMap {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>
+```
+接下来, 在 `views/pk/PK.vue` 中引入 `PlayGround.vue`:
+```html
+<script setup>
+import ContentField from "@/components/ContentField.vue";
+import PlayGround from "@/components/PlayGround.vue";
+</script>
+
+<template>
+  <ContentField>
+    <h2>Pk Page</h2>
+    <PlayGround/>
+  </ContentField>
+</template>
+
+<style scoped>
+
+</style>
+```
+所以, 当前 pk 页面的结构是: ContentField > PlayGround > GameMap
+
+## 4.2. 编写游戏的 JS 代码
