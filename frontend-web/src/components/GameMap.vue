@@ -1,20 +1,18 @@
 <script setup>
-// import { GameMap } from "@/assets/scripts/GameMap";
+import { GameMap } from "@/assets/scripts/gameMap";
 import { ref, onMounted } from "vue";
 
 const parent = ref(null);
 const canvas = ref(null);
 
 onMounted(() => {
-  // new GameMap(canvas.value.getContext('2d'), parent.value);
+  new GameMap(canvas.value.getContext('2d'), parent.value);
 })
 </script>
 
 <template>
   <div ref="parent" class="GameMap">
-    <canvas ref="canvas" tabindex="0">
-
-    </canvas>
+    <canvas ref="canvas" tabindex="0"/>
   </div>
 </template>
 

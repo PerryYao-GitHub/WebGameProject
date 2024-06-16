@@ -248,7 +248,7 @@ export default router
 # 4. PK 页面的游戏编写
 ## 4.1. 编写游戏界面的 views 部分
 需要编写两个 components: 
-- `PlayGround.vue`: 这是针对任何游戏都可以复用的 component, 它需要引用 `GameMap.vue`:
+- `PlayGround.vue`: 这是针对任何游戏都可以复用的 component, 因为在 pk 界面可能还包含记分板等不同的东西. 它需要引用 `GameMap.vue`:
 ```html
 <script setup>
 import GameMap from "@/components/GameMap.vue";
@@ -268,7 +268,7 @@ div.playground {
 }
 </style>
 ```
-- `GameMap.vue`: 这是针对 King of Bots 的地图 component, 它需要调用在 `src/assets/scripts/` 中的 `GameMap.js` 代码:
+- `GameMap.vue`: 这是针对 King of Bots 的地图 component, 它需要调用在 `src/assets/scripts/` 中的 `gameMap.js` 代码:
 ```html
 <script setup>
 // import { GameMap } from "@/assets/scripts/GameMap";
@@ -318,6 +318,146 @@ import PlayGround from "@/components/PlayGround.vue";
 
 </style>
 ```
-所以, 当前 pk 页面的结构是: ContentField > PlayGround > GameMap
 
 ## 4.2. 编写游戏的 JS 代码
+游戏的棋盘是一个 `canvas`, 位于 `<GameMap>` 中, 所以, 当前 pk 页面的结构是: ContentField > PlayGround > GameMap > canvas.
+
+编写 `webGame.js`:
+```javascript
+const WEB_GAME_OBJS = [];  // 定义游戏对象类和对象管理数组
+
+export class WebGame {
+    constructor() {
+        WEB_GAME_OBJS.push(this);
+        this.timeDelta = 0;  // 用于存储每帧之间的时间间隔
+        this.hasCalledStrated = false;  // 表示是否已经调用了 start 方法
+    }
+
+    // 定义游戏对象的生命周期方法
+    start() {  // 只执行一次
+        // 这个方法应该被子类重写以实现具体逻辑
+    }
+
+    update() {  // 每一帧执行一次
+        // 这个方法应该被子类重写以实现具体逻辑
+    }
+
+    // 销毁游戏对象
+    beforeDestroy() {  // 在游戏对象被销毁之前调用, 用于执行清理和释放资源的逻辑
+        // 这个方法应该被子类重写以实现具体逻辑
+    }
+
+    destroy() {
+        this.beforeDestroy();
+
+        for (let i in WEB_GAME_OBJS) {
+            const obj = WEB_GAME_OBJS[i];
+            if (obj === this) {
+                WEB_GAME_OBJS.splice(i);  // 从obj list中删除当前 obj
+                break;
+            }
+        }
+    }
+}
+
+// 主循环和动画帧更新
+let lastTimeStamp;
+
+// step(timeStamp): 这是一个递归调用的函数, 用于驱动游戏的主循环. 在每一帧更新时, 遍历 WEB_GAME_OBJS 数组, 依次调用游戏对象的 start() 或 update() 方法
+const step = timeStamp => {
+    for (let obj of WEB_GAME_OBJS) {
+        if (!obj.hasCalledStrated) {
+            obj.hasCalledStrated = true;
+            obj.start();
+        } else {
+            obj.timeDelta = timeStamp - lastTimeStamp;
+            obj.update();
+        }
+    }
+
+    lastTimeStamp = timeStamp;
+    requestAnimationFrame(step); // 请求下一帧动画
+}
+requestAnimationFrame(step);  // 开始游戏循环: requestAnimationFrame(step): 使用浏览器提供的 requestAnimationFrame 方法来请求下一帧动画, 确保游戏循环持续进行
+```
+编写 `gameMap.js`:
+
+```javascript
+import {WebGame} from "@/assets/scripts/WebGame";
+
+export class GameMap extends WebGame {
+  constructor(ctx, parent) {
+    super();
+    /*
+    在 GameMap.vue 中:
+    <script setup>
+    import { GameMap } from "@/assets/scripts/GameMap";
+    import { ref, onMounted } from "vue";
+
+    const parent = ref(null);
+    const canvas = ref(null);
+
+    onMounted(() => {
+      new GameMap(canvas.value.getContext('2d'), parent.value);  // onMounted(() => { ... }): Vue 3 的生命周期钩子, 在组件挂载后执行指定的逻辑. 创建 GameMap 实例, 传入 canvas 的 2D 上下文和父元素引用
+    })
+    </script>
+
+    <template>
+      <div ref="parent" class="GameMap">
+        <canvas ref="canvas" tabindex="0">
+
+        </canvas>
+      </div>
+    </template>
+
+    <style scoped>
+    div.GameMap {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    </style>
+
+    ctx 是 canvas.getContext('2d') 方法返回的 2D 渲染上下文对象.
+    canvas 是 HTML5 <canvas> 元素的 DOM 对象. 用于在网页上绘制图形.
+    getContext('2d') 方法返回一个用于在画布上绘制 2D 图形的上下文对象.
+    ctx 提供了一系列的绘图方法和属性, 例如 fillRect(), strokeRect(), drawImage() 等, 用于在 <canvas> 上进行绘制操作.
+
+    parent 是一个 DOM 元素的引用, 通常用来表示包含 <canvas> 元素的父级元素. 在 GameMap.vue 中就是 <div ref="parent" class="GameMap">
+    在 Vue 组件中，可以使用 ref 来获取到 DOM 元素的引用，从而在 JavaScript 中对其进行操作。
+    在这个例子中，parent 用于计算和设置 <canvas> 元素的尺寸，以确保适应其父元素的大小。
+    */
+    this.ctx = ctx;
+    this.parent = parent;
+    this.unitLength = 0;  // 整个 canvas 的单位边长
+
+    this.nRows = 15;  // nRows 个单位边长作为 canvas 的长
+    this.nCols = 18;  // nCols 个单位边长作为 canvas 的宽
+  }
+
+  start() {
+    super.start();
+  }
+
+  updateSize() {
+    // canvas 的长和宽 (以 unitLength 为单位边长)
+    this.unitLength = Math.min(this.parent.clientWidth / this.nCols, this.parent.clientHeight / this.nRows);
+    this.ctx.canvas.width = this.unitLength * this.nCols;
+    this.ctx.canvas.height = this.unitLength * this.nRows;
+  }
+
+  update() {
+    super.update();
+    this.updateSize();
+    this.render();
+  }
+
+  render() {
+    // 渲染
+    this.ctx.fillStyle = "green";
+    this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+  }
+}
+```

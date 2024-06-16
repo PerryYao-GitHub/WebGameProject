@@ -4,7 +4,7 @@ import GameMap from "@/components/GameMap.vue";
 
 <template>
   <div class="PlayGround">
-    <GameMap />
+    <GameMap/>
   </div>
 </template>
 
