@@ -1,4 +1,4 @@
-package com.webgame.backend.utils;
+package com.webgame.backend.config;
 
 import com.webgame.backend.pojo.UserInfo;
 import lombok.AllArgsConstructor;

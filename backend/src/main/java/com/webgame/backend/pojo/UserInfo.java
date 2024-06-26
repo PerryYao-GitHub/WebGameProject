@@ -11,4 +11,5 @@ public class UserInfo {  // 本质上是一个字典, 代表了表的一行; 类
     private int id;
     private String username;
     private String password;
+    private String profile;
 }

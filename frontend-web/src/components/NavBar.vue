@@ -1,6 +1,6 @@
 <script setup>
-import { useRoute } from "vue-router";
-import { computed } from "vue";
+import {useRoute} from "vue-router";
+import {computed} from "vue";
 
 const route = useRoute();
 let routeName = computed(() => route.name)
@@ -16,13 +16,18 @@ let routeName = computed(() => route.name)
 
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <router-link :class="routeName === 'pk' ? 'nav-link active' : 'nav-link'" :to="{name: 'pk'}">PK</router-link>
+            <router-link :class="routeName === 'pk' ? 'nav-link active' : 'nav-link'" :to="{name: 'pk'}">PK
+            </router-link>
           </li>
           <li class="nav-item">
-            <router-link :class="routeName === 'record' ? 'nav-link active' : 'nav-link'" :to="{name: 'record'}">Record</router-link>
+            <router-link :class="routeName === 'record' ? 'nav-link active' : 'nav-link'" :to="{name: 'record'}">
+              Record
+            </router-link>
           </li>
           <li class="nav-item">
-            <router-link :class="routeName === 'ranking' ? 'nav-link active' : 'nav-link'" :to="{name: 'ranking'}">Ranking</router-link>
+            <router-link :class="routeName === 'ranking' ? 'nav-link active' : 'nav-link'" :to="{name: 'ranking'}">
+              Ranking
+            </router-link>
           </li>
         </ul>
 

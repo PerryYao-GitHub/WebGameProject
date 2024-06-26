@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.webgame.backend.mapper.UserInfoMapper;
 import com.webgame.backend.pojo.UserInfo;
-import com.webgame.backend.utils.UserDetailsImpl;
+import com.webgame.backend.config.UserDetailsImpl;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {  // 检查用户的details合法与否; 将登录检测与数据库关联, 输入数据库中的用户名和密码正确, 就可以登录
