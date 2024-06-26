@@ -36,7 +36,8 @@ export default defineComponent({
       }
     });
 
-
+    // 测试 InfoController
+    /*
     $.ajax({
       url: "http://localhost:3000/user/account/info/",
       type: "get",
@@ -50,8 +51,26 @@ export default defineComponent({
         console.log(resp);
       },
     });
-  }
 
+    $.ajax({
+      url: "http://localhost:3000/user/account/register/",
+      type: "post",
+      data: {
+        username: "peiyouyao@gmail.com",
+        password: "ypy000324$webgame$",
+        confirmedPassword: "ypy000324$webgame$",
+      },
+      success(resp) {
+        console.log(resp);
+      },
+      error(resp) {
+        console.log(resp);
+      }
+    });
+    */
+
+
+  }
 })
 
 </script>
