@@ -125,7 +125,7 @@ export default router
 - 在 `App.vue` 的 `<style>` 标签中写入:
 ```html
 body {
-background-image: url("@/assets/img/somu.jpg");
+background-image: url("@/assets/img/background.jpg");
 background-color: rgba(255, 255, 255, 0.3);
 background-size: cover;
 }

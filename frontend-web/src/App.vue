@@ -1,5 +1,5 @@
 <template>
-  <NavBar></NavBar>
+  <NavBar />
   <router-view/>
 </template>
 
@@ -8,13 +8,15 @@ import NavBar from "@/components/NavBar.vue";
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap/dist/js/bootstrap"
 import {defineComponent} from "vue";
-import $ from "jquery";
+//import { defineComponent } from "vue";
+//import $ from "jquery";
 
 
 export default defineComponent({
-  components: {NavBar},
+   components: {NavBar},
 
   // 测试后端接口
+  /*
   setup() {
     // 测试 LoginController
     $.ajax({
@@ -37,7 +39,6 @@ export default defineComponent({
     });
 
     // 测试 InfoController
-    /*
     $.ajax({
       url: "http://localhost:3000/user/account/info/",
       type: "get",
@@ -67,17 +68,15 @@ export default defineComponent({
         console.log(resp);
       }
     });
-    */
-
-
   }
+  */
 })
 
 </script>
 
 <style>
 body {
-  background-image: url("@/assets/img/somu.jpg");
+  background-image: url("@/assets/img/backgroud.jpg");
   background-color: rgba(255, 255, 255, 0.3);
   background-size: cover;
 }
