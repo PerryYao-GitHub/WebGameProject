@@ -43,6 +43,7 @@ export default {
                 },
                 success(resp) {
                     if (resp.msg === "success") {
+                        localStorage.setItem("jwt_token", resp.token);  // 将用户的 token 存入浏览器的local storage, 刷新页面后仍然有效
                         context.commit("updateToken", resp.token);
                         data.success(resp);
                     } else data.error(resp);
@@ -83,6 +84,7 @@ export default {
         },
 
         logout(context) {
+            localStorage.removeItem("jwt_token");
             context.commit("logout");
         }
     },

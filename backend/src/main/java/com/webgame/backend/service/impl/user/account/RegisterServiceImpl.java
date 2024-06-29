@@ -22,37 +22,7 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Override
     public Map<String, String> register(String username, String password, String confirmedPassword) {
-        Map<String, String> respMap = new HashMap<String, String>();
-        if (username == null) {
-            respMap.put("msg", "username can not be null");
-            return respMap;
-        }
-
-        if (password == null || confirmedPassword == null) {
-            respMap.put("msg", "password can not be null");
-            return respMap;
-        }
-
-        username = username.trim();
-        if (username.length() < 6) {
-            respMap.put("msg", "username must be at least 6 characters");
-            return respMap;
-        }
-
-        if (username.length() > 60) {
-            respMap.put("msg", "username must be at most 60 characters");
-            return respMap;
-        }
-
-        if (password.length() > 60) {
-            respMap.put("msg", "password must be at most 60 characters");
-            return respMap;
-        }
-
-        if (!password.equals(confirmedPassword)) {
-            respMap.put("msg", "passwords do not match");
-            return respMap;
-        }
+        Map<String, String> respMap = new HashMap<>();
 
         QueryWrapper<UserInfo> q = new QueryWrapper<>();
         q.eq("username", username);
@@ -67,6 +37,6 @@ public class RegisterServiceImpl implements RegisterService {
         userInfoMapper.insert(userInfoAdded);
 
         respMap.put("msg", "success");
-        return respMap;
+        return respMap;add
     }
 }

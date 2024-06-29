@@ -12,10 +12,25 @@ export default {
         const store = useStore();
         let username = ref('');
         let password = ref('');
-        let error_message = ref('');
+        let errorMessage = ref('');
+
+        const jwtToken = localStorage.getItem("jwt_token");
+        if (jwtToken) {
+            store.commit("updateToken", jwtToken);
+            store.dispatch("getInfo", {
+                success() {
+                    router.push({name: "home"});
+                    // store.dispatch("updatePulling", false);
+                },
+                error() {
+                    // store.dispatch("updatePulling", false);
+                }
+            })
+        }
+        // else store.dispatch("updatePulling", false);
 
         const login = () => {
-            error_message.value = "";
+            errorMessage.value = "";
             store.dispatch("login", {
                 username: username.value,
                 password: password.value,
@@ -29,7 +44,7 @@ export default {
                     })
                 },
                 error() {
-                    error_message.value = "username of password is wrong"
+                    errorMessage.value = "username of password is wrong"
                     //console.log(resp);
                 }
             })
@@ -38,7 +53,7 @@ export default {
         return {
             username,
             password,
-            error_message,
+            error_message: errorMessage,
             login,
         }
     }
