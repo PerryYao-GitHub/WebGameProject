@@ -38,7 +38,7 @@ export class WebGame {
 let lastTimeStamp;
 
 // step(timeStamp): 这是一个递归调用的函数, 用于驱动游戏的主循环. 在每一帧更新时, 遍历 WEB_GAME_OBJS 数组, 依次调用游戏对象的 start() 或 update() 方法
-const step = timeStamp => {
+const step = timeStamp => {   // step 函数的参数 timeStamp 是由 requestAnimationFrame 函数自动传入的
     for (let obj of WEB_GAME_OBJS) {
         if (!obj.hasCalledStrated) {
             obj.hasCalledStrated = true;

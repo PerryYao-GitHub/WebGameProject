@@ -22,13 +22,39 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Override
     public Map<String, String> register(String username, String password, String confirmedPassword) {
-        Map<String, String> respMap = new HashMap<>();
+        Map<String, String> resp = new HashMap<>();
+        if (username.trim().isEmpty()) {
+            resp.put("msg", "Username can not be empty");
+            return resp;
+        }
 
+        if (username.length() < 6 || username.length() > 64) {
+            resp.put("msg", "Username must be between 6 and 64 characters");
+            return resp;
+        }
+
+        if (password.isEmpty() || confirmedPassword.isEmpty()) {
+            resp.put("msg", "Password can not be empty");
+            return resp;
+        }
+
+        if (password.length() < 6 || password.length() > 64) {
+            resp.put("msg", "Password must be between 6 and 64 characters");
+            return resp;
+        }
+
+        if (!password.equals(confirmedPassword)) {
+            resp.put("msg", "Passwords do not match");
+            return resp;
+        }
+
+
+        // 判断是否存在重复的用户名
         QueryWrapper<UserInfo> q = new QueryWrapper<>();
         q.eq("username", username);
         if (! userInfoMapper.selectList(q).isEmpty()) {
-            respMap.put("msg", "username already exist");
-            return respMap;
+            resp.put("msg", "username already exist");
+            return resp;
         }
 
         password = passwordEncoder.encode(password);
@@ -36,7 +62,7 @@ public class RegisterServiceImpl implements RegisterService {
         UserInfo userInfoAdded = new UserInfo(null, username, password, profile);
         userInfoMapper.insert(userInfoAdded);
 
-        respMap.put("msg", "success");
-        return respMap;add
+        resp.put("msg", "success");
+        return resp;
     }
 }

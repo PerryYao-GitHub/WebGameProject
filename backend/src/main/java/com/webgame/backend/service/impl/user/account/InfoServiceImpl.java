@@ -16,15 +16,17 @@ import java.util.Map;
 public class InfoServiceImpl implements InfoService {  // 根据 token 获取用户信息
     @Override
     public Map<String, String> getInfo() {
-        UsernamePasswordAuthenticationToken upToken = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl loginUser = (UserDetailsImpl) upToken.getPrincipal();
-        UserInfo userInfo = loginUser.getUserInfo();
+        Map<String, String> resp = new HashMap<>();
 
-        Map<String, String> infoMap = new HashMap<>();
-        infoMap.put("msg", "success");
-        infoMap.put("id", String.valueOf(userInfo.getId()));
-        infoMap.put("username", userInfo.getUsername());
-        infoMap.put("profile", userInfo.getProfile());
-        return infoMap;
+        //// 根据token 取出user的操作
+        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) token.getPrincipal();
+        UserInfo loginUserInfo = loginUser.getUserInfo();
+
+        resp.put("msg", "success");
+        resp.put("id", String.valueOf(loginUserInfo.getId()));
+        resp.put("username", loginUserInfo.getUsername());
+        resp.put("profile", loginUserInfo.getProfile());
+        return resp;
     }
 }

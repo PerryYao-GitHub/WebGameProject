@@ -22,8 +22,8 @@ export default {
                 return;
             }
 
-            if (username.value.length < 6 || username.value.length > 60) {
-                errorMessage.value = "Username must be between 6 and 60 characters";
+            if (username.value.length < 6 || username.value.length > 64) {
+                errorMessage.value = "Username must be between 6 and 64 characters";
                 return;
             }
 
@@ -32,8 +32,8 @@ export default {
                 return;
             }
 
-            if (password.value.length > 60) {
-                errorMessage.value = "Password must be at most 60 characters";
+            if (password.value.length < 6 || password.value.length > 64) {
+                errorMessage.value = "Password must be between 6 and 64 characters";
                 return;
             }
 

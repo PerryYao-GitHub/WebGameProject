@@ -13,8 +13,9 @@ export default {
         let username = ref('');
         let password = ref('');
         let errorMessage = ref('');
+        // let showContent = ref(false);
 
-        const jwtToken = localStorage.getItem("jwt_token");
+        const jwtToken = localStorage.getItem("jwt_token");  // 看看local storage中有没有保存的token
         if (jwtToken) {
             store.commit("updateToken", jwtToken);
             store.dispatch("getInfo", {
@@ -23,11 +24,11 @@ export default {
                     // store.dispatch("updatePulling", false);
                 },
                 error() {
-                    // store.dispatch("updatePulling", false);
+                    // showContent.value = true;
+                    store.commit("updatePullingInfo", false);
                 }
             })
-        }
-        // else store.dispatch("updatePulling", false);
+        } else store.commit("updatePullingInfo", false);
 
         const login = () => {
             errorMessage.value = "";
@@ -44,7 +45,7 @@ export default {
                     })
                 },
                 error() {
-                    errorMessage.value = "username of password is wrong"
+                    errorMessage.value = "username or password is wrong"
                     //console.log(resp);
                 }
             })
@@ -62,7 +63,7 @@ export default {
 
 
 <template>
-    <ContentField>
+    <ContentField v-if="!$store.state.user.isPullingInfo">
         <h2>User Account Login</h2>
         <div class="row justify-content-md-center">
             <div class="col-3">

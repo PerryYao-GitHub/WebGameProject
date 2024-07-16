@@ -93,6 +93,7 @@ const router = createRouter({
     routes
 })
 
+// 未登录状态下被重定向到login页面
 router.beforeEach((to, from, next) => {
     if (to.meta.requestAuth && !store.state.user.is_login) next({name: "user_account_login"})
     else next();

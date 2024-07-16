@@ -13,7 +13,10 @@ public class UserInfo {  // 本质上是一个字典, 代表了表的一行; 类
 
     @TableId(type = IdType.AUTO)
     private Integer id;  // 这里一定要用 Integer 不能是 int
+
     private String username;
+
     private String password;
+
     private String profile;
 }

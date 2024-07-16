@@ -17,19 +17,20 @@ import java.util.Map;
 public class LoginServiceImpl implements LoginService {
 
     @Autowired
-    private AuthenticationManager am;
+    private AuthenticationManager authenticationManager;
 
     @Override
     public Map<String, String> getToken(String username, String password) {
-        UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(username, password);
-        Authentication authenticate = am.authenticate(upToken);  // 如果登录失败, 会自动处理
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
+        Authentication authenticate = authenticationManager.authenticate(token);  // 如果登录失败, 会自动处理
         UserDetailsImpl loginUser = (UserDetailsImpl) authenticate.getPrincipal();
-        UserInfo userInfo = loginUser.getUserInfo();
-        String jwt = JwtUtil.createJWT(String.valueOf(userInfo.getId()));
+        UserInfo loginUserInfo = loginUser.getUserInfo();  // 获取对应用户名的用户信息
 
-        Map<String, String> respMap = new HashMap<>();
-        respMap.put("msg", "success");
-        respMap.put("token", jwt);
-        return respMap;  // 返回包含JWT的Map
+        String jwt = JwtUtil.createJWT(String.valueOf(loginUserInfo.getId()));  // 传入用户id, 生成jwt token
+
+        Map<String, String> resp = new HashMap<>();
+        resp.put("msg", "success");
+        resp.put("token", jwt);
+        return resp;  // 返回包含JWT的Map
     }
 }

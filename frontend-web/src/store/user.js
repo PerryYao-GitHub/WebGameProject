@@ -7,11 +7,12 @@ export default {
         profile: "",
         token: "",
         is_login: false,
+        isPullingInfo: true,
     },
 
     getters: {},
 
-    mutations: {
+    mutations: {  // 使用 store.commit("函数名", params)
         updateUser(state, user) {
             state.id = user.id;
             state.username = user.username;
@@ -23,6 +24,10 @@ export default {
             state.token = token;
         },
 
+        updatePullingInfo(state, isPulling) { // 是否正在拉取信息
+            state.isPullingInfo = isPulling;
+        },
+
         logout(state) {
             state.id = "";
             state.username = "";
@@ -32,7 +37,7 @@ export default {
         },
     },
 
-    actions: {
+    actions: {  // 使用 store.dispatch("函数名", params)
         login(context, data) {
             $.ajax({
                 url: "http://localhost:3000/user/account/token/",
@@ -68,7 +73,6 @@ export default {
                         context.commit("updateUser", {
                             ...resp,
                             is_login: true,
-
                         });
                         data.success(resp);
                     } else {

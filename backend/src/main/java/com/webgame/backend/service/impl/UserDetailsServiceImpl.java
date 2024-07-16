@@ -22,9 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {  // 检查�
         QueryWrapper<UserInfo> q = new QueryWrapper<>();
         q.eq("username", username);
         UserInfo selectedUserInfo = userInfoMapper.selectOne(q);
-        if (selectedUserInfo == null) {
-            throw new RuntimeException("no such user");
-        }
+        if (selectedUserInfo == null) { throw new RuntimeException("no such user"); }
         return new UserDetailsImpl(selectedUserInfo);
     }
 }
