@@ -23,28 +23,27 @@ public class RegisterServiceImpl implements RegisterService {
     @Override
     public Map<String, String> register(String username, String password, String confirmedPassword) {
         Map<String, String> resp = new HashMap<>();
-        if (username.trim().isEmpty()) {
-            resp.put("msg", "Username can not be empty");
+        // username
+        if (username == null || username.trim().isEmpty()) {
+            resp.put("msg", "username can not be empty");
             return resp;
         }
-
         if (username.length() < 6 || username.length() > 64) {
-            resp.put("msg", "Username must be between 6 and 64 characters");
+            resp.put("msg", "username must be between 6 and 64 characters");
             return resp;
         }
 
-        if (password.isEmpty() || confirmedPassword.isEmpty()) {
-            resp.put("msg", "Password can not be empty");
+        // password
+        if (password == null || password.isEmpty() || confirmedPassword.isEmpty()) {
+            resp.put("msg", "password can not be empty");
             return resp;
         }
-
         if (password.length() < 6 || password.length() > 64) {
-            resp.put("msg", "Password must be between 6 and 64 characters");
+            resp.put("msg", "password must be between 6 and 64 characters");
             return resp;
         }
-
         if (!password.equals(confirmedPassword)) {
-            resp.put("msg", "Passwords do not match");
+            resp.put("msg", "passwords do not match");
             return resp;
         }
 
@@ -53,7 +52,7 @@ public class RegisterServiceImpl implements RegisterService {
         QueryWrapper<UserInfo> q = new QueryWrapper<>();
         q.eq("username", username);
         if (! userInfoMapper.selectList(q).isEmpty()) {
-            resp.put("msg", "username already exist");
+            resp.put("msg", "username already exists");
             return resp;
         }
 

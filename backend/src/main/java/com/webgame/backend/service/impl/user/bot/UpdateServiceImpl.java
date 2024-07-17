@@ -46,22 +46,32 @@ public class UpdateServiceImpl implements UpdateService {
         String description = req.get("description");
         String content = req.get("content");
 
-        if (title.trim().isEmpty() || title.length() > 64) {
-            resp.put("msg", "title must be between 6 and 64 characters");
+        // title
+        if (title == null || title.trim().isEmpty()) {
+            resp.put("msg", "title can not be empty");
+            return resp;
+        }
+        if (title.length() > 64) {
+            resp.put("msg", "title is longer than 64 characters");
             return resp;
         }
 
-        if (description == null) {
-            description = "This is a lazy man, writing nothing here...";
+        // description
+        if (description == null || description.isEmpty()) {  // 如果字符串可能为 null，可以先判断是否为 null，然后再使用 isEmpty() 方法或直接判断长度是否为 0
+            description = "This is a lazy guy, writing nothing here...";
         }
-
         if (description.length() > 256) {
             resp.put("msg", "description must be less than 256 characters");
             return resp;
         }
 
-        if (content == null || content.length() > 10000) {
-            resp.put("msg", "content must be less than 10000 characters and can't be empty");
+        // content
+        if (content == null || content.isEmpty()) {
+            resp.put("msg", "content can not be empty");
+            return resp;
+        }
+        if (content.length() > 10000) {
+            resp.put("msg", "content is longer than 10000 characters");
             return resp;
         }
 
